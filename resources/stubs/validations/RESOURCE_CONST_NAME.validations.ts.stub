@@ -1,0 +1,27 @@
+export const RULES = {
+    create: {
+        rules: {
+            RESOURCE_CONST_NAME: 'required|min:5',
+            zip: 'required',
+            state: 'required',
+            country: 'required',
+            city: 'required',
+        },
+        messages: {
+            "required.zip": 'Zip code must be given',
+            required: 'You forgot to given a :attribute',
+        },
+        attributes: {
+            zip: 'Zip code'
+        }
+    },
+    update: {
+        rules: {
+            id: 'required'
+        }
+    },
+    delete: {
+
+    },
+    // Your other validation rules
+}

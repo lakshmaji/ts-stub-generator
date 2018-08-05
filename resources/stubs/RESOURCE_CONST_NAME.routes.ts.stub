@@ -1,0 +1,29 @@
+import * as express from 'express';
+import { injectable, inject } from 'inversify';
+import { RESOURCE_CLASS_NAMEController } from './controllers/RESOURCE_CONST_NAME.controller';
+import TYPES from './RESOURCE_CONST_NAME.types';
+import { apple } from './middlewares/apple.middleware';
+import { genericException } from '../../exceptions/exception.handler';
+import { RegistrableRoutes } from '../../core/registerable.routes';
+
+@injectable()
+export class RESOURCE_CLASS_NAMERoutes implements RegistrableRoutes {
+    private RESOURCE_CONST_NAMERESOURCE_CLASS_NAMEControllerService: RESOURCE_CLASS_NAMEController;
+
+    constructor(@inject(TYPES.RESOURCE_CLASS_NAMEController) RESOURCE_CONST_NAMERESOURCE_CLASS_NAMEControllerService: RESOURCE_CLASS_NAMEController) {
+        this.RESOURCE_CONST_NAMERESOURCE_CLASS_NAMEControllerService = RESOURCE_CONST_NAMERESOURCE_CLASS_NAMEControllerService;
+    }
+
+    public register(router: express.Router): void {
+        router.get('/RESOURCE_CONST_NAME', apple, (req: express.Request, res: express.Response, next: express.NextFunction) => this.RESOURCE_CONST_NAMERESOURCE_CLASS_NAMEControllerService.index(req, res, next).catch(err => this.report(err, req, res)));
+        router.post('/RESOURCE_CONST_NAME', (req: express.Request, res: express.Response, next: express.NextFunction) => this.RESOURCE_CONST_NAMERESOURCE_CLASS_NAMEControllerService.store(req, res, next).catch(err => this.report(err, req, res)));
+        router.get('/RESOURCE_CONST_NAME/:id', (req: express.Request, res: express.Response, next: express.NextFunction) => this.RESOURCE_CONST_NAMERESOURCE_CLASS_NAMEControllerService.show(req, res, next));
+        router.put('/RESOURCE_CONST_NAME/:id', (req: express.Request, res: express.Response, next: express.NextFunction) => this.RESOURCE_CONST_NAMERESOURCE_CLASS_NAMEControllerService.update(req, res, next));
+    }
+
+
+    report(err, req, res) {
+        return genericException(err, req, res);
+    }
+}
+

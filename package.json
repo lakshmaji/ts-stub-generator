@@ -1,0 +1,17 @@
+{
+  "name": "gene",
+  "version": "1.0.0",
+  "description": "Generate source files from stubs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lakshmaji <lakshmajee88@gmail.com> (https://github.com/lakshmaji)",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.16.0",
+    "data-store": "^3.0.3"
+  },
+  "preferGlobal": true,
+  "bin": "./index.js"
+}

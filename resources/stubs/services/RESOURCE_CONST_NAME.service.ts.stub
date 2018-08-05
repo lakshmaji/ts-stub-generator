@@ -1,0 +1,99 @@
+import { injectable, inject } from 'inversify';
+import 'reflect-metadata';
+import { RESOURCE_CLASS_NAMEDTO } from '../schemas/RESOURCE_CONST_NAME.shema';
+import { IINTERFACE_NAMERepository } from '../repositories/RESOURCE_CONST_NAME.repository';
+import { RESOURCE_CLASS_NAME } from '../models/RESOURCE_CONST_NAME.model';
+import { io, app, emitter } from '../../../../main';
+import RESOURCE_GLOBAL_CONST_NAME_IOC_TYPES from '../RESOURCE_CONST_NAME.types';
+
+export interface IINTERFACE_NAMEService {
+    getRESOURCE_CLASS_NAMEes(): Promise<Array<RESOURCE_CLASS_NAME>>;
+    createRESOURCE_CLASS_NAME(RESOURCE_CONST_NAME: RESOURCE_CLASS_NAME): Promise<RESOURCE_CLASS_NAME>;
+    updateRESOURCE_CLASS_NAME(RESOURCE_CONST_NAME: RESOURCE_CLASS_NAME): Promise<RESOURCE_CLASS_NAME>;
+    getRESOURCE_CLASS_NAME(id: string): Promise<RESOURCE_CLASS_NAME>;
+}
+
+@injectable()
+export class RESOURCE_CLASS_NAMEService implements IINTERFACE_NAMEService {
+
+    private _repository: IINTERFACE_NAMERepository;
+    private _eme = emitter;
+    constructor(
+        @inject(RESOURCE_GLOBAL_CONST_NAME_IOC_TYPES.IINTERFACE_NAMERepository) _repository: IINTERFACE_NAMERepository
+    ) {
+        this._repository = _repository;
+    }
+
+    public async getRESOURCE_CLASS_NAMEes(): Promise<Array<RESOURCE_CLASS_NAME>> {
+        // grab RESOURCE_CONST_NAMEes from db
+        const RESOURCE_CONST_NAMEesDb: Array<RESOURCE_CLASS_NAME> = await this._repository.findAll().then((a2) => a2.map((dto: RESOURCE_CLASS_NAMEDTO) => {
+            return this.toRESOURCE_CLASS_NAMEDTO(dto);
+        }));
+        return RESOURCE_CONST_NAMEesDb;
+    }
+
+    public async createRESOURCE_CLASS_NAME(RESOURCE_CONST_NAME: RESOURCE_CLASS_NAME): Promise<RESOURCE_CLASS_NAME> {
+        const RESOURCE_CONST_NAMEDTO: RESOURCE_CLASS_NAMEDTO = this.toRESOURCE_CLASS_NAME(RESOURCE_CONST_NAME, true);
+        // duplicates the RESOURCE_CONST_NAME in the DB
+        const resulAddre = await this._repository.create(RESOURCE_CONST_NAMEDTO);
+
+        // this._addrEvent.doSomething(resulAddre);
+        // this._addrEvent.emit('doSomething', {
+        //     ...this.toRESOURCE_CLASS_NAMEDTO(resulAddre)
+        // });
+        this._eme.emit('doSomething', {
+            ...this.toRESOURCE_CLASS_NAMEDTO(resulAddre)
+        })
+
+        return await this.toRESOURCE_CLASS_NAMEDTO(resulAddre);
+    }
+
+
+
+    public async updateRESOURCE_CLASS_NAME(RESOURCE_CONST_NAME: RESOURCE_CLASS_NAME): Promise<RESOURCE_CLASS_NAME> {
+        const RESOURCE_CONST_NAMEDTO: RESOURCE_CLASS_NAMEDTO = this.toRESOURCE_CLASS_NAME(RESOURCE_CONST_NAME);
+        // update db RESOURCE_CONST_NAME
+        await this._repository.update(RESOURCE_CONST_NAMEDTO);
+
+        return await this.toRESOURCE_CLASS_NAMEDTO(RESOURCE_CONST_NAMEDTO);
+    }
+
+    public async getRESOURCE_CLASS_NAME(id: string): Promise<RESOURCE_CLASS_NAME> {
+        let RESOURCE_CONST_NAME = await this._repository.find(id).then((a) => {
+            return this.toRESOURCE_CLASS_NAMEDTO(a);
+        });
+        return RESOURCE_CONST_NAME;
+    }
+
+    private toRESOURCE_CLASS_NAME(RESOURCE_CONST_NAME: RESOURCE_CLASS_NAME, create = false): RESOURCE_CLASS_NAMEDTO {
+        if (create) {
+
+            return {
+                RESOURCE_CONST_NAME: RESOURCE_CONST_NAME.getRESOURCE_CLASS_NAME,
+                city: RESOURCE_CONST_NAME.getCity,
+                state: RESOURCE_CONST_NAME.getState,
+                zip: RESOURCE_CONST_NAME.getZip,
+                country: RESOURCE_CONST_NAME.getCountry,
+                // _id: generateUniqueId()
+            };
+        }
+        return {
+            RESOURCE_CONST_NAME: RESOURCE_CONST_NAME.getRESOURCE_CLASS_NAME,
+            city: RESOURCE_CONST_NAME.getCity,
+            state: RESOURCE_CONST_NAME.getState,
+            zip: RESOURCE_CONST_NAME.getZip,
+            country: RESOURCE_CONST_NAME.getCountry,
+            _id: RESOURCE_CONST_NAME.getId
+        };
+    }
+
+    private toRESOURCE_CLASS_NAMEDTO(RESOURCE_CONST_NAMEDTO: RESOURCE_CLASS_NAMEDTO): RESOURCE_CLASS_NAME {
+        return new RESOURCE_CLASS_NAME(
+            RESOURCE_CONST_NAMEDTO.RESOURCE_CONST_NAME,
+            RESOURCE_CONST_NAMEDTO.city,
+            RESOURCE_CONST_NAMEDTO.state,
+            RESOURCE_CONST_NAMEDTO.zip,
+            RESOURCE_CONST_NAMEDTO.country,
+            RESOURCE_CONST_NAMEDTO._id.toString());
+    }
+}

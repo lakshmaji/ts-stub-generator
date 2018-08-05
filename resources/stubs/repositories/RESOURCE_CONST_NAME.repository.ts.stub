@@ -1,0 +1,52 @@
+import { injectable } from 'inversify';
+import { Connection, Repository } from 'typeorm';
+import { RESOURCE_CLASS_NAMEDTO, RESOURCE_CLASS_NAMESchema } from '../schemas/RESOURCE_CONST_NAME.shema';
+import { DBConnection } from '../../../utils/DBConnection';
+
+export interface IINTERFACE_NAMERepository {
+    findAll(): Promise<Array<RESOURCE_CLASS_NAMEDTO>>;
+    create(RESOURCE_CONST_NAMEDTO: RESOURCE_CLASS_NAMEDTO): Promise<RESOURCE_CLASS_NAMEDTO>;
+    update(RESOURCE_CONST_NAMEDTO: RESOURCE_CLASS_NAMEDTO): Promise<RESOURCE_CLASS_NAMEDTO>;
+    find(id: string): Promise<RESOURCE_CLASS_NAMEDTO>;
+}
+
+@injectable()
+export class RESOURCE_CLASS_NAMERepository extends DBConnection implements IINTERFACE_NAMERepository {
+
+    private _repository: Repository<RESOURCE_CLASS_NAMESchema>;
+
+    constructor() {
+        super();
+        this.connect().then(async connection => {
+            this._repository =  await connection.getRepository(RESOURCE_CLASS_NAMESchema);
+        }).catch(err => {
+            throw new Error(err);
+        });
+    }
+
+    public async findAll(): Promise<Array<RESOURCE_CLASS_NAMEDTO>> {
+        return await this._repository.find();
+    }
+
+    public async create(RESOURCE_CONST_NAMEDTO: RESOURCE_CLASS_NAMEDTO): Promise<RESOURCE_CLASS_NAMEDTO> {
+        try {
+            const data = await this._repository.create(RESOURCE_CONST_NAMEDTO);
+            return await this._repository.save(data);
+        } catch (err) {
+            throw new Error(err);
+        }
+    }
+
+    public async update(RESOURCE_CONST_NAMEDTO: RESOURCE_CLASS_NAMEDTO): Promise<RESOURCE_CLASS_NAMEDTO> {
+        // need to replace this with update
+        return await this._repository.create(RESOURCE_CONST_NAMEDTO);
+    }
+
+    public async find(id: string): Promise<RESOURCE_CLASS_NAMEDTO> {
+        return await this._repository.findOne(id);
+    }
+
+    private connect(): Promise<Connection> {
+        return super.connection;
+    }
+}

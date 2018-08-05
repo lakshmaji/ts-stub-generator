@@ -1,0 +1,34 @@
+export class RESOURCE_CLASS_NAME {
+    constructor(
+        private RESOURCE_CONST_NAME: string,
+        private city: string,
+        private state: string,
+        private zip: string,
+        private country: string,
+        private id?: string) {
+    }
+
+    get getRESOURCE_CLASS_NAME(): string {
+        return this.RESOURCE_CONST_NAME;
+    }
+
+    get getCity(): string {
+        return this.city;
+    }
+
+    get getState(): string {
+        return this.state;
+    }
+
+    get getZip(): string {
+        return this.zip;
+    }
+
+    get getCountry(): string {
+        return this.country;
+    }
+
+    get getId(): string {
+        return this.id;
+    }
+}

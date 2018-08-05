@@ -1,0 +1,30 @@
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+export interface RESOURCE_CLASS_NAMEDTO {
+    _id?: string;
+    RESOURCE_CONST_NAME?: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+}
+
+/**
+ * TypeORM Schema Config
+ */
+
+@Entity('RESOURCE_CONST_NAME')
+export class RESOURCE_CLASS_NAMESchema implements RESOURCE_CLASS_NAMEDTO {
+    @PrimaryGeneratedColumn()
+    public _id?: string;
+    @Column()
+    public RESOURCE_CONST_NAME?: string;
+    @Column()
+    public city: string;
+    @Column()
+    public state: string;
+    @Column()
+    public zip: string;
+    @Column()
+    public country: string;
+}

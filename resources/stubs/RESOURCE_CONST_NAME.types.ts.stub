@@ -1,0 +1,8 @@
+const RESOURCE_GLOBAL_CONST_NAME_IOC_TYPES = {
+    IINTERFACE_NAMERepository: Symbol('IINTERFACE_NAMERepository'),
+    IINTERFACE_NAMEService: Symbol('IINTERFACE_NAMEService'),
+    Controller: Symbol('Controller'),
+    RESOURCE_CLASS_NAMEController: Symbol('RESOURCE_CLASS_NAMEController'),    
+};
+
+export default RESOURCE_GLOBAL_CONST_NAME_IOC_TYPES;

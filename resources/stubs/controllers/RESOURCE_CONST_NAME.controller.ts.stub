@@ -1,0 +1,74 @@
+import * as express from 'express';
+import { injectable, inject } from 'inversify';
+import { IINTERFACE_NAMEService } from '../services/RESOURCE_CONST_NAME.service';
+import { RESOURCE_CLASS_NAME } from '../models/RESOURCE_CONST_NAME.model';
+import RESOURCE_GLOBAL_CONST_NAME_IOC_TYPES from '../RESOURCE_CONST_NAME.types';
+import { RULES } from '../validations/RESOURCE_CONST_NAME.validations';
+import { Exception } from '../../../exceptions/exception.class';
+import { OK } from 'http-status-codes';
+import { CODES } from '../../../config/codes.config';
+import { INodeValidation } from '../../../core/validator.core';
+import TYPES from '../../../core/registerable.types';
+
+export interface IINTERFACE_NAMEController {
+    index(req, res, next): any;
+    store(req, res, next): any;
+    update(req, res, next): any;
+    show(req, res, next): any;
+}
+
+@injectable()
+export class RESOURCE_CLASS_NAMEController implements IINTERFACE_NAMEController {
+    private _rules = RULES;
+    private _service: IINTERFACE_NAMEService;
+    private _val: INodeValidation;
+
+    constructor(
+        @inject(RESOURCE_GLOBAL_CONST_NAME_IOC_TYPES.IINTERFACE_NAMEService) _service: IINTERFACE_NAMEService,
+        @inject(TYPES.INodeValidation) _val: INodeValidation
+    ) {
+        this._service = _service;
+        this._val = _val;
+    }
+
+    public async index(req: express.Request, res: express.Response, next: express.NextFunction) {
+        const RESOURCE_CONST_NAMEes = await this._service.getRESOURCE_CLASS_NAMEes().catch(err => next(err));
+        return res.status(OK).json(RESOURCE_CONST_NAMEes);
+    }
+
+    public async store(req: express.Request, res: express.Response, next: express.NextFunction) {
+        const _createRESOURCE_CLASS_NAMERules = { data: req.body, ...this._rules['create'] };
+        if (!this._val.with(_createRESOURCE_CLASS_NAMERules).passes()) {
+            throw new Exception(CODES.APPLICATION.VALIDATION_ERROR, this._val.formatErrorMessages());
+        }
+        const RESOURCE_CONST_NAME = new RESOURCE_CLASS_NAME(
+            req.body.RESOURCE_CONST_NAME,
+            req.body.city,
+            req.body.state,
+            req.body.zip,
+            req.body.country
+        );
+        const createdRESOURCE_CLASS_NAME = await this._service.createRESOURCE_CLASS_NAME(RESOURCE_CONST_NAME).catch(err => next(err));
+        return res.json(createdRESOURCE_CLASS_NAME);
+    }
+
+    public async show(req: express.Request, res: express.Response, next: express.NextFunction) {
+        const RESOURCE_CONST_NAMEes = await this._service.getRESOURCE_CLASS_NAME(<string>req.params.id).catch(err => next(err));
+        return res.json(RESOURCE_CONST_NAMEes);
+    };
+
+
+    public async update(req: express.Request, res: express.Response, next: express.NextFunction) {
+        const RESOURCE_CONST_NAME = new RESOURCE_CLASS_NAME(
+            req.body.RESOURCE_CONST_NAME,
+            req.body.city,
+            req.body.state,
+            req.body.zip,
+            req.body.country,
+            req.body.id
+        );
+
+        const updatedRESOURCE_CLASS_NAME = await this._service.updateRESOURCE_CLASS_NAME(RESOURCE_CONST_NAME).catch(err => next(err));
+        return res.json(updatedRESOURCE_CLASS_NAME);
+    }
+}

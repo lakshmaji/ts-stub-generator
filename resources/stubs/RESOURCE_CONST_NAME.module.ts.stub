@@ -1,0 +1,16 @@
+import { ContainerModule, interfaces } from 'inversify';
+import TYPES from '../../core/registerable.types';
+import { RegistrableRoutes } from '../../core/registerable.routes';
+import { IINTERFACE_NAMERepository, RESOURCE_CLASS_NAMERepository } from './repositories/RESOURCE_CONST_NAME.repository';
+import { IINTERFACE_NAMEService, RESOURCE_CLASS_NAMEService } from './services/RESOURCE_CONST_NAME.service';
+import { RESOURCE_CLASS_NAMEController } from './controllers/RESOURCE_CONST_NAME.controller';
+import { RESOURCE_CLASS_NAMERoutes } from './RESOURCE_CONST_NAME.routes';
+
+let RESOURCE_CONST_NAMEModule = new ContainerModule((bind: interfaces.Bind, unbind: interfaces.Unbind) => {
+    bind<RegistrableRoutes>(TYPES.Controller).to(RESOURCE_CLASS_NAMERoutes);
+    bind<IINTERFACE_NAMEService>(TYPES.IINTERFACE_NAMEService).to(RESOURCE_CLASS_NAMEService);
+    bind<IINTERFACE_NAMERepository>(TYPES.IINTERFACE_NAMERepository).to(RESOURCE_CLASS_NAMERepository);
+    bind<RESOURCE_CLASS_NAMEController>(TYPES.RESOURCE_CLASS_NAMEController).to(RESOURCE_CLASS_NAMEController);
+});
+
+export default RESOURCE_CONST_NAMEModule;
